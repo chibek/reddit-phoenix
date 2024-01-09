@@ -4,6 +4,8 @@ defmodule Discuss.Discussions.Comment do
 
   schema "comments" do
     field :content, :string
+    belongs_to :topic, Discuss.Discussions.Topic
+    belongs_to :user, Discuss.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
