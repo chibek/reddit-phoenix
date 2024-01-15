@@ -28,7 +28,7 @@ defmodule DiscussWeb.AuthController do
         |> redirect(to: ~p"/topics")
 
       {:error, reason} ->
-        IO.inspect(reason)
+        {:error, reason}
 
         conn
         |> put_flash(:error, "Unable to sign in.")

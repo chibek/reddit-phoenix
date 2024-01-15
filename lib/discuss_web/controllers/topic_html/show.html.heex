@@ -12,12 +12,23 @@
   <:item title="Title"><%= @topic.title %></:item>
 </.list>
 <div class="flex flex-col items-start mt-10 space-y-3">
-<input id="comment-content" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400" />
-<button id="add-comment" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Add comment</button>
+  <input
+    id="comment-content"
+    type="text"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+  />
+  <button
+    id="add-comment"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+  >
+    Add comment
+  </button>
 </div>
+
+<ul class="collection space-y-2 mt-6"></ul>
 <.back navigate={~p"/topics"}>Back to topics</.back>
 <script>
-document.addEventListener("DOMContentLoaded", function (){
-  window.createSocket(<%= @topic.id %>)
-})
+  document.addEventListener("DOMContentLoaded", function (){
+    window.createSocket(<%= @topic.id %>)
+  })
 </script>

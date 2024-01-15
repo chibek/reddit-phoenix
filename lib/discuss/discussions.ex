@@ -37,8 +37,8 @@ defmodule Discuss.Discussions do
   """
   def get_topic!(id) do
     Topic
-     |> Repo.get!(id)
-     |> Repo.preload(:comments)
+    |> Repo.get!(id)
+    |> Repo.preload(comments: [:user])
   end
 
   @doc """
@@ -156,8 +156,8 @@ defmodule Discuss.Discussions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(topic ,attrs \\ %{}) do
-    Ecto.build_assoc(topic, :comments, attrs)
+  def create_comment(user_id, topic, attrs \\ %{}) do
+    Ecto.build_assoc(topic, :comments, user_id: user_id)
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

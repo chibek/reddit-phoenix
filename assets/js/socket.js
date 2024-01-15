@@ -53,23 +53,48 @@ let socket = new Socket("/socket", { params: { token: window.userToken } });
 // Finally, connect to the socket:
 socket.connect();
 
-
 const createSocket = (topicId) => {
   let channel = socket.channel("comments:" + topicId, {});
   channel
-  .join()
-  .receive("ok", (resp) => {
-    console.log("Joined successfully", resp);
-  })
-  .receive("error", (resp) => {
-    console.log("Unable to join", resp);
+    .join()
+    .receive("ok", (resp) => {
+      const comments = JSON.parse(resp).comments;
+      renderComments(comments);
+    })
+    .receive("error", (resp) => {
+      console.log("Unable to join", resp);
+    });
+
+  channel.on(`comments:${topicId}:new`, renderComment);
+
+  document.querySelector("#add-comment").addEventListener("click", () => {
+    const content = document.querySelector("#comment-content").value;
+    channel.push("comment:add", { content: content });
+  });
+};
+
+function renderComments(comments) {
+  const renderedComments = comments.map(({ content, user }) => {
+    return commentTemplate(content, user);
   });
 
-  document.querySelector('#add-comment').addEventListener('click', () => 
-  {
-    const content = document.querySelector('#comment-content').value
-    channel.push('comment:add', {content: content})
-  })
+  document.querySelector(".collection").innerHTML = renderedComments.join("");
+}
+
+function renderComment(event) {
+  const renderedComment = commentTemplate(event.comment.content);
+  document.querySelector(".collection").innerHTML += renderedComment;
+}
+
+function commentTemplate(content, user) {
+  let email = "Anonymous";
+  if (user) {
+    email = user.email;
+  }
+  return `<li class="p-4 border shadow-sm rounded-lg">
+  <div class="text-xs text-gray-500">${email}</div>
+  ${content}
+  </li>`;
 }
 
 window.createSocket = createSocket;
