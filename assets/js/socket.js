@@ -53,8 +53,10 @@ let socket = new Socket("/socket", { params: { token: window.userToken } });
 // Finally, connect to the socket:
 socket.connect();
 
-let channel = socket.channel("comments:1", {});
-channel
+
+const createSocket = (topicId) => {
+  let channel = socket.channel("comments:" + topicId, {});
+  channel
   .join()
   .receive("ok", (resp) => {
     console.log("Joined successfully", resp);
@@ -63,4 +65,11 @@ channel
     console.log("Unable to join", resp);
   });
 
-export default socket;
+  document.querySelector('#add-comment').addEventListener('click', () => 
+  {
+    const content = document.querySelector('#comment-content').value
+    channel.push('comment:add', {content: content})
+  })
+}
+
+window.createSocket = createSocket;

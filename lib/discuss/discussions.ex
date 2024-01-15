@@ -35,7 +35,11 @@ defmodule Discuss.Discussions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_topic!(id), do: Repo.get!(Topic, id)
+  def get_topic!(id) do
+    Topic
+     |> Repo.get!(id)
+     |> Repo.preload(:comments)
+  end
 
   @doc """
   Creates a topic.
@@ -152,8 +156,8 @@ defmodule Discuss.Discussions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(attrs \\ %{}) do
-    %Comment{}
+  def create_comment(topic ,attrs \\ %{}) do
+    Ecto.build_assoc(topic, :comments, attrs)
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

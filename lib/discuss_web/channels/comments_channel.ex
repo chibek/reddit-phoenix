@@ -1,20 +1,26 @@
 defmodule DiscussWeb.CommentsChannel do
   use DiscussWeb, :channel
 
+  alias Discuss.Discussions
+  alias DiscussWeb.Topic
   @impl true
-  def join("comments:1", payload, socket) do
-    {:ok, socket}
-    # if authorized?(payload) do
-    #   {:ok, socket}
-    # else
-    #   {:error, %{reason: "unauthorized"}}
-    # end
+  def join("comments:" <> topic_id, _payload, socket) do
+    topic_id = String.to_integer(topic_id)
+    topic = Discussions.get_topic!(topic_id)
+    IO.inspect(%{comments:  )
+    {:ok, %{}, assign(socket, :topic, topic)}
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
   @impl true
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
+  def handle_in(name, %{"content" => content}, socket) do
+    topic = socket.assigns.topic
+
+    case Discussions.create_comment(topic, %{content: content}) do
+      {:ok, comment} ->
+        {:reply, :ok, socket}
+      {:error, _reason} ->
+        {:reply, :error, socket}
+    end
+
   end
 end
