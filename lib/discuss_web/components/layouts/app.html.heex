@@ -1,8 +1,8 @@
 <header class="px-4 sm:px-6 lg:px-8">
   <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
-    <div class="flex items-center gap-4">
+    <a href="/" class="flex items-center gap-4">
       Logo
-    </div>
+    </a>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <%= if @conn.assigns[:user] do %>
         <.link
@@ -16,7 +16,7 @@
           class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
           href={~p"/auth/github"}
         >
-           Login with Github 
+          Login with Github
         </.link>
       <% end %>
     </div>
